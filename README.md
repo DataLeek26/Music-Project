@@ -1,2 +1,2 @@
 # Music-Project
-A project for University School of Music, Details TBD
+A project for University of Texas School of Music, Details TBD
