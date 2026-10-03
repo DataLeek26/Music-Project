@@ -27,7 +27,6 @@ ocr = PaddleOCR(
 ocr_lock = threading.Lock()
 
 #OCR
-
 def process_image(image: np.ndarray) -> tuple[str, list[float]]:
     with ocr_lock:
         results = ocr.predict(image)
@@ -45,5 +44,13 @@ def render_pdf_as_image(page: "fitz.Page") -> np.ndarray:
     return cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
 #PROCESSING WORKFLOW
+def process_file(data: bytes, filename:str) -> dict: #uses ocr pipeline to process an uploaded image or pdf
+    pass
+
+def send_output(result: dict):
+    pass
 
 #ROUTES
+@app.route("/upload", methods=["POST"])
+def upload(): #This is the function the app would call when processing an uploaded image
+    pass
