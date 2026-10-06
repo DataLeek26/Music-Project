@@ -67,3 +67,9 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# React and Node js related ignores
+node_modules/
+.env
+build/
+dist/
