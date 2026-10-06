@@ -1,0 +1,17 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE composers(composer_id INTEGER PRIMARY KEY,first_name TEXT,middle_name TEXT,last_name TEXT,display_name TEXT NOT NULL,birth_date_text TEXT,death_date_text TEXT);
+CREATE TABLE works(work_id INTEGER PRIMARY KEY,composer_id INTEGER,title TEXT NOT NULL,composition_year TEXT,catalog_number TEXT,FOREIGN KEY(composer_id) REFERENCES composers(composer_id) ON DELETE SET NULL);
+CREATE TABLE arrangers_contributors(contributor_id INTEGER PRIMARY KEY,first_name TEXT,middle_name TEXT,last_name TEXT,display_name TEXT NOT NULL);
+CREATE TABLE work_contributors(work_contributor_id INTEGER PRIMARY KEY,work_id INTEGER NOT NULL,contributor_id INTEGER NOT NULL,role TEXT NOT NULL,FOREIGN KEY(work_id) REFERENCES works(work_id) ON DELETE CASCADE,FOREIGN KEY(contributor_id) REFERENCES arrangers_contributors(contributor_id) ON DELETE CASCADE);
+CREATE TABLE performers(performer_id INTEGER PRIMARY KEY,first_name TEXT,middle_name TEXT,last_name TEXT,display_name TEXT NOT NULL,instrument TEXT);
+CREATE TABLE conductors(conductor_id INTEGER PRIMARY KEY,first_name TEXT,middle_name TEXT,last_name TEXT,display_name TEXT NOT NULL);
+CREATE TABLE ensembles(ensemble_id INTEGER PRIMARY KEY,name TEXT NOT NULL,ensemble_type TEXT);
+CREATE TABLE events(event_id INTEGER PRIMARY KEY,event_type TEXT,recital_type TEXT,title TEXT,performance_date TEXT,performance_time TEXT,location TEXT,conductor_id INTEGER,ensemble_id INTEGER,FOREIGN KEY(conductor_id) REFERENCES conductors(conductor_id) ON DELETE SET NULL,FOREIGN KEY(ensemble_id) REFERENCES ensembles(ensemble_id) ON DELETE SET NULL);
+CREATE TABLE program_items(program_item_id INTEGER PRIMARY KEY,event_id INTEGER NOT NULL,work_id INTEGER NOT NULL,program_order INTEGER,movements TEXT,FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,FOREIGN KEY(work_id) REFERENCES works(work_id) ON DELETE CASCADE);
+CREATE TABLE program_item_performers(program_item_performer_id INTEGER PRIMARY KEY,program_item_id INTEGER NOT NULL,performer_id INTEGER NOT NULL,instrument TEXT,role TEXT,FOREIGN KEY(program_item_id) REFERENCES program_items(program_item_id) ON DELETE CASCADE,FOREIGN KEY(performer_id) REFERENCES performers(performer_id) ON DELETE CASCADE);
+CREATE TABLE sources(source_id INTEGER PRIMARY KEY,event_id INTEGER NOT NULL,pdf_url TEXT,filename TEXT,FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE);
+CREATE INDEX idx_composer_name ON composers(display_name);
+CREATE INDEX idx_work_title ON works(title);
+CREATE INDEX idx_conductor_name ON conductors(display_name);
+CREATE INDEX idx_performer_name ON performers(display_name);
+CREATE INDEX idx_event_date ON events(performance_date);
