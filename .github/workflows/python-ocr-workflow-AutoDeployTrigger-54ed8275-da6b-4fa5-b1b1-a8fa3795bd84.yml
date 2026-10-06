@@ -1,0 +1,49 @@
+name: Trigger auto deployment for python-ocr-workflow
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/python-ocr-workflow-AutoDeployTrigger-54ed8275-da6b-4fa5-b1b1-a8fa3795bd84.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.PYTHONOCRWORKFLOW_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.PYTHONOCRWORKFLOW_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.PYTHONOCRWORKFLOW_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: repertoireocrregistry.azurecr.io
+          registryUsername: ${{ secrets.PYTHONOCRWORKFLOW_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.PYTHONOCRWORKFLOW_REGISTRY_PASSWORD }}
+          containerAppName: python-ocr-workflow
+          resourceGroup: DateLeek
+          imageToBuild: repertoireocrregistry.azurecr.io/python-ocr-workflow:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
