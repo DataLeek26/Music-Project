@@ -1,3 +1,18 @@
+/* This file controls all of the app's style
+*/
+
+:root {
+  /*Primary Colors*/
+  --UNT-SYSTEM-GREEN: #0F5C00;
+  --WHITE: #FFFFFF;
+  --DARK-GRAY: #4D4D4F;
+
+  /*Secondary Colors*/
+  --UNT-GREEN: #00853E;
+  --LIGHT-GRAY: #DCDDDE;
+  --BLACK: #000000;
+}
+
 .App {
   text-align: center;
 }

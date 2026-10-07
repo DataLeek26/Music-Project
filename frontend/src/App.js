@@ -1,8 +1,8 @@
 //temp AI code
+//the root component that holds the visual structure and logic of your user interface
 
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Spinner, Alert } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [message, setMessage] = useState('');
