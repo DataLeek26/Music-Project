@@ -14,6 +14,7 @@ backend:
 
 frontend:
 - npm install react-bootstrap bootstrap
+- npm install react-router-dom
 
 ## Instructions to run Front/Backend
 Enter two terminals, one in the frontend folder and another in the backend folder. Once in the folders, run...
